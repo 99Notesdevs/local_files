@@ -82,6 +82,7 @@ services:
       - grafana
       # ⛔ Removed postgres from depends_on
     ports:
+      -  ${GRPC_PORT}:${GRPC_PORT}
       - "${PORT}:${PORT}"
     environment:
       DATABASE_URL: ${DATABASE_URL}
@@ -95,6 +96,7 @@ services:
       AWS_REGION: ${AWS_REGION}
       AWS_BUCKET_NAME: ${AWS_BUCKET_NAME}
       KAFKA_BROKER: ${KAFKA_BROKER}
+      GRPC_PORT: ${GRPC_PORT}
     volumes:
       - ./main-backend:/app
       - /app/node_modules
@@ -118,6 +120,8 @@ services:
       TOKEN_SECRET: ${TOKEN_SECRET}
       PORT: ${PORT_TEST}
       KAFKA_BROKER: ${KAFKA_BROKER}
+      GRPC_HOST: ${GRPC_HOST}
+      GRPC_PORT: ${GRPC_PORT}
     volumes:
       - ./test-microservice-backend:/app
       - /app/node_modules
