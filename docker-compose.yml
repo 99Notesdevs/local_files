@@ -126,6 +126,30 @@ services:
       - ./test-microservice-backend:/app
       - /app/node_modules
 
+  shop_microservice:
+    build: ./shop-backend
+    container_name: local_shop
+    restart: always
+    depends_on:
+      - redis
+      - loki
+      - grafana
+      - kafka
+    ports:
+      - "${PORT_SHOP}:${PORT_SHOP}"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_URL: ${REDIS_URL}
+      TOKEN_SECRET: ${TOKEN_SECRET}
+      PORT: ${PORT_SHOP}
+      KAFKA_BROKER: ${KAFKA_BROKER}
+      GRPC_HOST: ${GRPC_HOST}
+      GRPC_PORT: ${GRPC_PORT}
+    volumes:
+      - ./shop-backend:/app
+      - /app/node_modules
 volumes:
   postgres-data:
   grafana-data:
