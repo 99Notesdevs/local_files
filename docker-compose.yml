@@ -97,6 +97,8 @@ services:
       AWS_BUCKET_NAME: ${AWS_BUCKET_NAME}
       KAFKA_BROKER: ${KAFKA_BROKER}
       GRPC_PORT: ${GRPC_PORT}
+      DOMAIN: ${DOMAIN}
+      ENV: ${ENV}
     volumes:
       - ./main-backend:/app
       - /app/node_modules
@@ -122,6 +124,8 @@ services:
       KAFKA_BROKER: ${KAFKA_BROKER}
       GRPC_HOST: ${GRPC_HOST}
       GRPC_PORT: ${GRPC_PORT}
+      DOMAIN: ${DOMAIN}
+      ENV: ${ENV}
     volumes:
       - ./test-microservice-backend:/app
       - /app/node_modules
@@ -147,6 +151,8 @@ services:
       KAFKA_BROKER: ${KAFKA_BROKER}
       GRPC_HOST: ${GRPC_HOST}
       GRPC_PORT: ${GRPC_PORT}
+      DOMAIN: ${DOMAIN}
+      ENV: ${ENV}
     volumes:
       - ./shop-backend:/app
       - /app/node_modules
