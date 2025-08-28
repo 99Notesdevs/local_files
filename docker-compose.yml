@@ -15,6 +15,15 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
   redis:
     image: redis:alpine
     container_name: local_redis
@@ -207,8 +216,27 @@ services:
       - ./dash-backend:/app
       - /app/node_modules
 
+  messaging-service:
+    build: ./messaging-service
+    container_name: messaging-service
+    ports:
+      - "4000:4000"
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      PORT: 4000
+      TOKEN_SECRET: ${TOKEN_SECRET}
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - ./messaging-service:/app
+      - /app/node_modules
+
 volumes:
   postgres-data:
   grafana-data:
   kafka-data:
   zookeeper-data:
+  mongo-data:
