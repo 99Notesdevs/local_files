@@ -14,6 +14,20 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+  
+  postgres_2:
+    image: postgres:15
+    container_name: local_postgres_2
+    restart: always
+    profiles: ["dev"]   # ✅ Only included when --profile dev is active
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres-data_2:/var/lib/postgresql_2/data
 
   mongo:
     image: mongo:6
@@ -81,6 +95,23 @@ services:
     volumes:
       - kafka-data:/var/lib/kafka/data
 
+  elasticsearch:
+    image: elasticsearch:9.2.0
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
   app:
     build: ./main-backend
     container_name: local_app
@@ -89,6 +120,7 @@ services:
       - redis
       - loki
       - grafana
+      - elasticsearch
       # ⛔ Removed postgres from depends_on
     ports:
       - "${PORT}:${PORT}"
@@ -236,7 +268,9 @@ services:
 
 volumes:
   postgres-data:
+  postgres-data_2:
   grafana-data:
   kafka-data:
   zookeeper-data:
   mongo-data:
+  elasticsearch-data:
